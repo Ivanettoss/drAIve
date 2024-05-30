@@ -1,0 +1,7 @@
+path: /Users/i0nut02/Downloads/programming/CrossWalks/data
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 1
+names: ['Crosswalk']
