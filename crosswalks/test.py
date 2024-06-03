@@ -22,19 +22,20 @@ def create_collage(images, output_path):
 
     cv2.imwrite(output_path, collage)
 
-input_dir = './images'
-output_dir = './outputs'
+if __name__ == "__main__":
+    input_dir = './crosswalks/images'
+    output_dir = './crosswalks/outputs'
 
-for image_name in os.listdir(input_dir):
-    image_path = os.path.join(input_dir, image_name)
-    image = cv2.imread(image_path)
+    for image_name in os.listdir(input_dir):
+        image_path = os.path.join(input_dir, image_name)
+        image = cv2.imread(image_path)
 
-    if image is None:
-        print(f'Error: Could not open image {image_name}.')
-        continue
+        if image is None:
+            print(f'Error: Could not open image {image_name}.')
+            continue
 
-    (a, _) = process_image(image)
-    create_collage([image] + a, os.path.join(output_dir, image_name))
-    print(image_name)
+        (a, _) = process_image(image)
+        create_collage([image] + a, os.path.join(output_dir, image_name))
+        print(image_name)
 
-print("Processing completed. Check the './outputs' folder for results.")
+    print("Processing completed. Check the './outputs' folder for results.")
