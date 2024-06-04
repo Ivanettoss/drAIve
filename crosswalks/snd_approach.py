@@ -48,4 +48,4 @@ if __name__ == "__main__":
     # Example usage
     image_path = "./crosswalks/images/a.jpg"
     output_path = "./crosswalks/a.jpg"
-    first_approch_filter(image_path, output_path)
+    second_approch_filter(image_path, output_path)
