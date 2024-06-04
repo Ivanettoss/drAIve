@@ -5,7 +5,6 @@ from sklearn.cluster import KMeans
 from utils import colorize_image, group_contours
 
 def process_image(img):
-    cv2.resize(img, (640, 640))
     height, width = img.shape[:2]
     roi = img[height // 3:, :]
 
@@ -13,7 +12,6 @@ def process_image(img):
     l_channel, _, _ = cv2.split(lab_img)
 
     mean = np.mean(l_channel.flatten())
-    cv2.putText(roi, f'{mean:.2f}', (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
     l_channel_reshaped = l_channel.reshape(-1, 1)
     num_clusters = 3 if mean < 55 else 4 if mean < 75 else 5 if mean < 110 else 11
@@ -32,10 +30,10 @@ def process_image(img):
     max_br_image[max_mask] = 255
     max_br_image[~max_mask] = 0
 
-    kernel_top = np.ones((3, 3), np.uint8)
-    morph = cv2.morphologyEx(max_br_image, cv2.MORPH_OPEN, kernel_top)
-    kernel_top = np.ones((5, 5), np.uint8)
-    morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, kernel_top)
+    kernel = np.ones((3, 3), np.uint8)
+    morph = cv2.morphologyEx(max_br_image, cv2.MORPH_OPEN, kernel)
+    kernel = np.ones((5, 5), np.uint8)
+    morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, kernel)
 
     cntrs = cv2.findContours(morph, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cntrs = cntrs[0] if len(cntrs) == 2 else cntrs[1]
@@ -56,8 +54,10 @@ def process_image(img):
     groups = group_contours(good_contours)
 
     result = roi.copy()
-    for rect in groups:
+    for i, rect in enumerate(groups):
         x_min, y_min, w, h = rect
+        # draw on the image applied with the roi
         cv2.rectangle(result, (x_min, y_min), (x_min + w, y_min + h), (0, 255, 0), 2)
-
+        # save original image rectangle
+        groups[i] = (x_min, y_min + height // 3, w, h)
     return ([roi, cluster_image, morph, contours, result], groups)

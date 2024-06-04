@@ -10,7 +10,7 @@ python -m venv env
 active the virtual environment
 - macOS
     ```
-    source myenv/bin/activate
+    source env/bin/activate
     ```
 - Windows
     ```

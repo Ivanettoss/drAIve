@@ -9,15 +9,17 @@ def group_contours(contours, tolerance=0.2, min_group_size=3):
         for j, contour2 in enumerate(contours):
             if i != j:
                 cx, cy, cw, ch = cv2.boundingRect(contours[j])
-                mean_h = (h + ch) / 2.0
-                mean_center_y = (y + h / 2.0 + cy + ch / 2.0) / 2.0
-                current_center_y = (cy + ch / 2.0)
-                mean_area = (cv2.contourArea(contour) + cv2.contourArea(contours[j])) / 2.0
+                mean_h = sum(cv2.boundingRect(c)[3] for c in group) / len(group)
+                mean_w = sum(cv2.boundingRect(c)[2] for c in group) / len(group)
+                mean_center_y = sum((cv2.boundingRect(c)[1] + cv2.boundingRect(c)[3]) / 2.0 for c in group) / len(group)
+                current_center_y = ((cy + ch) / 2.0)
+                mean_area = sum(cv2.contourArea(c) for c in group) / len(group)
                 current_area = cv2.contourArea(contours[j])
 
-                if (abs(ch - mean_h) / mean_h < tolerance and
-                    abs(current_center_y - mean_center_y) / mean_h < tolerance and
-                    abs(current_area - mean_area) / mean_area < 0.65):
+                if (abs(ch - mean_h) / mean_h < 0.2 and
+                    abs(cw - mean_w) / mean_w < 0.5 and
+                    abs(current_center_y - mean_center_y) / mean_h < 0.2 and
+                    abs(current_area - mean_area) / mean_area < 0.5): #0.65
                     group.append(contour2)
 
         groups.append(group)
