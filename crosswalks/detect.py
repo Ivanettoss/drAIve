@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from sklearn.cluster import KMeans
+import os
 
 from utils import colorize_image, group_contours
 
@@ -11,7 +12,6 @@ def process_image(img):
 
     lab_img = cv2.cvtColor(roi, cv2.COLOR_BGR2LAB)
     l_channel, _, _ = cv2.split(lab_img)
-
 
     mean = np.mean(l_channel.flatten())
 

@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 
-def group_contours(contours, tolerance=0.2, min_group_size=3):
+def group_contours(contours, min_group_size=3):
     groups = []
     for i, contour in enumerate(contours):
-        x, y, w, h = cv2.boundingRect(contour)
         group = [contour]
+
         for j, contour2 in enumerate(contours):
             if i != j:
                 cx, cy, cw, ch = cv2.boundingRect(contours[j])
@@ -19,7 +19,7 @@ def group_contours(contours, tolerance=0.2, min_group_size=3):
                 if (abs(ch - mean_h) / mean_h < 0.2 and
                     abs(cw - mean_w) / mean_w < 0.5 and
                     abs(current_center_y - mean_center_y) / mean_h < 0.2 and
-                    abs(current_area - mean_area) / mean_area < 0.5): #0.65
+                    abs(current_area - mean_area) / mean_area < 0.65):
                     group.append(contour2)
 
         groups.append(group)

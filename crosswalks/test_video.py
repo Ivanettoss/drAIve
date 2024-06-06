@@ -26,6 +26,7 @@ while ret:
     if i%4 != 0:
         ret, frame = cap.read()
         continue
+
     # Perform object detection
     results = process_image(frame.copy())[1]
     for result in results:
@@ -35,7 +36,7 @@ while ret:
 
     # Read next frame
     ret, frame = cap.read()
-    print(i)
+
 # Release VideoCapture and VideoWriter
 cap.release()
 out.release()
